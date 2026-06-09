@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jadwal Pembelajaran – Pondok Pesantren At Taqwa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --hijau-tua: #1a4731;
+      --hijau-mid: #2d6a4f;
+      --hijau-muda: #52b788;
+      --emas: #c9a84c;
+      --emas-terang: #f0c96b;
+      --krem: #fdf8f0;
+      --putih: #ffffff;
+      --abu: #f4f4f4;
+      --teks: #1a1a1a;
+      --teks-abu: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--krem);
+      color: var(--teks);
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, var(--hijau-tua) 0%, var(--hijau-mid) 60%, #3d8b6b 100%);
+      color: white;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.15);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -30px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 32px 24px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-circle {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--emas);
+      background: rgba(201,168,76,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 36px;
+    }
+
+    .header-text h1 {
+      font-family: 'Amiri', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .header-text .arabic {
+      font-family: 'Amiri', serif;
+      font-size: 1.5rem;
+      color: var(--emas-terang);
+      direction: rtl;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .header-text p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .emas-bar {
+      height: 4px;
+      background: linear-gradient(90deg, var(--emas), var(--emas-terang), var(--emas));
+    }
+
+    /* NAV TABS */
+    .nav-tabs {
+      max-width: 1100px;
+      margin: 24px auto 0;
+      padding: 0 24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: 2px solid var(--hijau-mid);
+      border-radius: 8px;
+      background: white;
+      color: var(--hijau-tua);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--hijau-mid);
+      color: white;
+    }
+
+    /* MAIN */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-title .icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--hijau-mid);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .section-title h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--hijau-tua);
+    }
+
+    .section-title p {
+      font-size: 0.85rem;
+      color: var(--teks-abu);
+    }
+
+    /* INFO CARDS */
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .info-card .num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--hijau-mid);
+    }
+
+    .info-card .label {
+      font-size: 0.8rem;
+      color: var(--teks-abu);
+      margin-top: 4px;
+    }
+
+    /* JADWAL TABLE */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .table-wrap {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .table-header {
+      background: linear-gradient(135deg, var(--hijau-tua), var(--hijau-mid));
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-header h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .table-header span {
+      background: var(--emas);
+      color: var(--hijau-tua);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      background: #f0faf4;
+      color: var(--hijau-tua);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 2px solid var(--hijau-muda);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: #f7fdf9; }
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      padding: 13px 16px;
+      font-size: 0.88rem;
+      color: var(--teks);
+    }
+
+    .jam-badge {
+      background: var(--hijau-tua);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .mapel {
+      font-weight: 600;
+      color: var(--hijau-tua);
+    }
+
+    .mapel small {
+      display: block;
+      font-weight: 400;
+      color: var(--teks-abu);
+      font-size: 0.78rem;
+    }
+
+    .ustadz {
+      color: var(--teks-abu);
+      font-size: 0.82rem;
+    }
+
+    .hari-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .hari-senin   { background:#e0f2fe; color:#0369a1; }
+    .hari-selasa  { background:#ede9fe; color:#5b21b6; }
+    .hari-rabu    { background:#fce7f3; color:#be185d; }
+    .hari-kamis   { background:#ecfdf5; color:#065f46; }
+    .hari-jumat   { background:#fff7ed; color:#c2410c; }
+    .hari-sabtu   { background:#fef9c3; color:#92400e; }
+    .hari-ahad    { background:#fee2e2; color:#991b1b; }
+
+    .kelas-badge {
+      background: var(--emas);
+      color: var(--hijau-tua);
+      font-size: 0.73rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    /* JADWAL HARIAN */
+    .hari-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .hari-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .hari-card-header {
+      padding: 12px 18px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .hari-card-header.senin  { background: #0369a1; }
+    .hari-card-header.selasa { background: #5b21b6; }
+    .hari-card-header.rabu   { background: #be185d; }
+    .hari-card-header.kamis  { background: #065f46; }
+    .hari-card-header.jumat  { background: #c2410c; }
+    .hari-card-header.sabtu  { background: #92400e; }
+
+    .hari-card ul { list-style: none; padding: 12px 0; }
+    .hari-card ul li {
+      padding: 9px 18px;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .hari-card ul li:last-child { border-bottom: none; }
+
+    .li-jam { font-size: 0.75rem; color: var(--teks-abu); min-width: 80px; padding-top: 2px; }
+    .li-info .li-mapel { font-size: 0.87rem; font-weight: 600; color: var(--hijau-tua); }
+    .li-info .li-ust  { font-size: 0.78rem; color: var(--teks-abu); }
+
+    /* KEGIATAN */
+    .kegiatan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .kegiatan-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .kegiatan-card .k-icon { font-size: 2rem; margin-bottom: 10px; }
+    .kegiatan-card h4 { font-size: 1rem; font-weight: 700; color: var(--hijau-tua); margin-bottom: 6px; }
+    .kegiatan-card p { font-size: 0.83rem; color: var(--teks-abu); line-height: 1.5; }
+    .kegiatan-card .k-waktu {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--hijau-mid);
+      background: #ecfdf5;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* PROFIL */
+    .profil-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .profil-box {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .profil-box h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--hijau-tua);
+      margin-bottom: 14px;
+      border-bottom: 2px solid var(--hijau-muda);
+      padding-bottom: 8px;
+    }
+
+    .profil-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+    }
+
+    .profil-row .pkey {
+      min-width: 130px;
+      color: var(--teks-abu);
+      font-weight: 500;
+    }
+
+    .profil-row .pval { font-weight: 600; color: var(--teks); }
+
+    /* FOOTER */
+    footer {
+      background: var(--hijau-tua);
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 0.82rem;
+      margin-top: 40px;
+    }
+
+    footer strong { color: var(--emas-terang); }
+
+    @media (max-width: 640px) {
+      .header-text h1 { font-size: 1.3rem; }
+      .header-text .arabic { font-size: 1.1rem; }
+      .logo-circle { width: 60px; height: 60px; font-size: 26px; }
+      .nav-tabs { gap: 6px; }
+      .tab-btn { padding: 8px 14px; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-circle">🕌</div>
+    <div class="header-text">
+      <span class="arabic">معهد التقوى الإسلامي</span>
+      <h1>Pondok Pesantren At Taqwa</h1>
+      <p>📍 Sistem Informasi Jadwal Pembelajaran Santri</p>
+    </div>
+  </div>
+</header>
+<div class="emas-bar"></div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('beranda')">🏠 Beranda</button>
+  <button class="tab-btn" onclick="showTab('jadwal-kelas')">📋 Jadwal per Kelas</button>
+  <button class="tab-btn" onclick="showTab('jadwal-harian')">📅 Jadwal Harian</button>
+  <button class="tab-btn" onclick="showTab('kegiatan')">🌙 Kegiatan Harian</button>
+  <button class="tab-btn" onclick="showTab('profil')">🏫 Profil Pesantren</button>
+</div>
+
+<main>
+
+  <!-- ====== BERANDA ====== -->
+  <div id="beranda" class="panel active">
+    <br>
+    <div class="section-title">
+      <div class="icon">📊</div>
+      <div>
+        <h2>Ringkasan Pesantren</h2>
+        <p>Data umum Pondok Pesantren At Taqwa</p>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="num">6</div>
+        <div class="label">Tingkatan Kelas</div>
+      </div>
+      <div class="info-card">
+        <div class="num">12</div>
+        <div class="label">Mata Pelajaran</div>
+      </div>
+      <div class="info-card">
+        <div class="num">8</div>
+        <div class="label">Ustadz / Ustadzah</div>
+      </div>
+      <div class="info-card">
+        <div class="num">6</div>
+        <div class="label">Hari Belajar / Minggu</div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <div class="icon">🕐</div>
+      <div>
+        <h2>Jadwal Lengkap Semua Kelas</h2>
+        <p>Seluruh mata pelajaran dalam satu tabel</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>📖 Jadwal Pembelajaran Santri – Semua Kelas</h3>
+        <span>TA 2024/2025</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Hari</th>
+              <th>Jam</th>
+              <th>Mata Pelajaran</th>
+              <th>Kelas</th>
+              <th>Ustadz/Ustadzah</th>
+              <th>Ruang</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-semua"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== JADWAL PER KELAS ====== -->
+  <div id="jadwal-kelas" class="panel">
+    <br>
+    <div class="section-title">
+      <div class="icon">📋</div>
+      <div>
+        <h2>Jadwal per Kelas</h2>
+        <p>Pilih kelas untuk melihat jadwal</p>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="tab-btn active" id="btn-kelas-1" onclick="filterKelas('I')">Kelas I (Ula)</button>
+      <button class="tab-btn" id="btn-kelas-2" onclick="filterKelas('II')">Kelas II (Ula)</button>
+      <button class="tab-btn" id="btn-kelas-3" onclick="filterKelas('III')">Kelas III (Ula)</button>
+      <button class="tab-btn" id="btn-kelas-4" onclick="filterKelas('IV')">Kelas IV (Wustho)</button>
+      <button class="tab-btn" id="btn-kelas-5" onclick="filterKelas('V')">Kelas V (Wustho)</button>
+      <button class="tab-btn" id="btn-kelas-6" onclick="filterKelas('VI')">Kelas VI (Ulya)</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3 id="judul-kelas">📖 Jadwal Kelas I (Ula)</h3>
+        <span>Per Kelas</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Hari</th>
+              <th>Jam</th>
+              <th>Mata Pelajaran</th>
+              <th>Ustadz/Ustadzah</th>
+              <th>Ruang</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-kelas"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== JADWAL HARIAN ====== -->
+  <div id="jadwal-harian" class="panel">
+    <br>
+    <div class="section-title">
+      <div class="icon">📅</div>
+      <div>
+        <h2>Jadwal Harian</h2>
+        <p>Jadwal pembelajaran berdasarkan hari</p>
+      </div>
+    </div>
+    <div class="hari-grid" id="hari-grid"></div>
+  </div>
+
+  <!-- ====== KEGIATAN ====== -->
+  <div id="kegiatan" class="panel">
+    <br>
+    <div class="section-title">
+      <div class="icon">🌙</div>
+      <div>
+        <h2>Kegiatan Harian Santri</h2>
+        <p>Jadwal rutinitas santri setiap hari</p>
+      </div>
+    </div>
+    <div class="kegiatan-grid">
+      <div class="kegiatan-card">
+        <div class="k-icon">🌅</div>
+        <h4>Sholat Subuh Berjamaah</h4>
+        <p>Seluruh santri wajib mengikuti sholat Subuh berjamaah di masjid pesantren, dilanjutkan dzikir dan doa bersama.</p>
+        <span class="k-waktu">04.30 – 05.15</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">📖</div>
+        <h4>Tahfidz Al-Qur'an</h4>
+        <p>Kegiatan menghafal dan murajaah Al-Qur'an dibimbing langsung oleh ustadz hafidz setiap pagi setelah subuh.</p>
+        <span class="k-waktu">05.15 – 06.00</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">🍳</div>
+        <h4>Makan Pagi & Persiapan</h4>
+        <p>Santri makan pagi bersama di dapur umum pesantren dan mempersiapkan diri untuk kegiatan belajar mengajar.</p>
+        <span class="k-waktu">06.00 – 07.00</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">🏫</div>
+        <h4>Kegiatan Belajar Mengajar</h4>
+        <p>Pembelajaran di kelas meliputi ilmu agama, bahasa Arab, bahasa Inggris, dan mata pelajaran umum sesuai kurikulum pesantren.</p>
+        <span class="k-waktu">07.00 – 12.00</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">🕌</div>
+        <h4>Sholat Dzuhur Berjamaah</h4>
+        <p>Santri melaksanakan sholat Dzuhur berjamaah di masjid, dilanjutkan istirahat dan makan siang bersama.</p>
+        <span class="k-waktu">12.00 – 13.30</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">📚</div>
+        <h4>KBM Siang & Ngaji Kitab</h4>
+        <p>Sesi pembelajaran siang, meliputi pengajian kitab kuning, fiqih, tafsir, dan ilmu-ilmu keislaman lainnya.</p>
+        <span class="k-waktu">13.30 – 15.30</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">🌤️</div>
+        <h4>Sholat Ashar & Olahraga</h4>
+        <p>Sholat Ashar berjamaah dilanjutkan dengan kegiatan olahraga seperti sepak bola, voli, dan senam.</p>
+        <span class="k-waktu">15.30 – 17.00</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">🌙</div>
+        <h4>Sholat Maghrib & Diniyah</h4>
+        <p>Sholat Maghrib berjamaah, dilanjutkan pengajian Al-Qur'an dan pelajaran diniyah malam bersama ustadz.</p>
+        <span class="k-waktu">18.00 – 19.30</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">🌠</div>
+        <h4>Sholat Isya & Belajar Malam</h4>
+        <p>Sholat Isya berjamaah dan kegiatan belajar mandiri terbimbing (mudzakarah) di aula pesantren.</p>
+        <span class="k-waktu">19.30 – 21.30</span>
+      </div>
+      <div class="kegiatan-card">
+        <div class="k-icon">💤</div>
+        <h4>Istirahat Malam</h4>
+        <p>Seluruh santri wajib beristirahat (tidur) sebagai persiapan untuk aktivitas keesokan harinya.</p>
+        <span class="k-waktu">21.30 – 04.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== PROFIL ====== -->
+  <div id="profil" class="panel">
+    <br>
+    <div class="section-title">
+      <div class="icon">🏫</div>
+      <div>
+        <h2>Profil Pesantren</h2>
+        <p>Informasi Pondok Pesantren At Taqwa</p>
+      </div>
+    </div>
+    <div class="profil-grid">
+      <div class="profil-box">
+        <h3>🏷️ Identitas Pesantren</h3>
+        <div class="profil-row"><span class="pkey">Nama Resmi</span><span class="pval">Pondok Pesantren At Taqwa</span></div>
+        <div class="profil-row"><span class="pkey">Nama Arab</span><span class="pval">معهد التقوى الإسلامي</span></div>
+        <div class="profil-row"><span class="pkey">Jenis</span><span class="pval">Pesantren Salafiyah Modern</span></div>
+        <div class="profil-row"><span class="pkey">Status</span><span class="pval">Swasta / Yayasan</span></div>
+        <div class="profil-row"><span class="pkey">Tahun Berdiri</span><span class="pval">1985</span></div>
+      </div>
+      <div class="profil-box">
+        <h3>📍 Lokasi & Kontak</h3>
+        <div class="profil-row"><span class="pkey">Alamat</span><span class="pval">Jl. At Taqwa No. 1, Indonesia</span></div>
+        <div class="profil-row"><span class="pkey">Kode Pos</span><span class="pval">–</span></div>
+        <div class="profil-row"><span class="pkey">Telepon</span><span class="pval">(021) xxx-xxxx</span></div>
+        <div class="profil-row"><span class="pkey">Email</span><span class="pval">info@attaqwa.ac.id</span></div>
+        <div class="profil-row"><span class="pkey">Website</span><span class="pval">www.attaqwa.ac.id</span></div>
+      </div>
+      <div class="profil-box">
+        <h3>👨‍🏫 Pimpinan & Pengasuh</h3>
+        <div class="profil-row"><span class="pkey">Pengasuh Utama</span><span class="pval">KH. Ahmad At Taqwa</span></div>
+        <div class="profil-row"><span class="pkey">Direktur</span><span class="pval">Ust. Muhammad Fauzi, S.Pd.I</span></div>
+        <div class="profil-row"><span class="pkey">Bag. Akademik</span><span class="pval">Ust. Hasan Basri, M.Ag</span></div>
+        <div class="profil-row"><span class="pkey">Bag. Santri</span><span class="pval">Usth. Fatimah Azzahra</span></div>
+      </div>
+      <div class="profil-box">
+        <h3>📚 Program Unggulan</h3>
+        <div class="profil-row"><span class="pkey">Program 1</span><span class="pval">Tahfidz Al-Qur'an 30 Juz</span></div>
+        <div class="profil-row"><span class="pkey">Program 2</span><span class="pval">Kajian Kitab Kuning</span></div>
+        <div class="profil-row"><span class="pkey">Program 3</span><span class="pval">Bahasa Arab & Inggris</span></div>
+        <div class="profil-row"><span class="pkey">Program 4</span><span class="pval">Pendidikan Formal (JSIT)</span></div>
+        <div class="profil-row"><span class="pkey">Program 5</span><span class="pval">Keterampilan & Wirausaha</span></div>
+      </div>
+    </div>
+    <div class="profil-box" style="max-width:100%">
+      <h3>🌟 Visi & Misi</h3>
+      <div class="profil-row"><span class="pkey">Visi</span><span class="pval">Mencetak generasi muslim yang berakhlak mulia, berilmu tinggi, dan bermanfaat bagi umat dan bangsa.</span></div>
+      <div class="profil-row" style="margin-top:8px"><span class="pkey">Misi</span><span class="pval">1. Menyelenggarakan pendidikan Islam yang berkualitas. 2. Membentuk karakter santri yang disiplin, mandiri, dan bertaqwa. 3. Mengintegrasikan ilmu agama dan ilmu umum secara seimbang.</span></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <strong>Pondok Pesantren At Taqwa</strong> &nbsp;|&nbsp; Sistem Informasi Jadwal Pembelajaran Santri<br>
+  Tahun Ajaran 2024/2025 &nbsp;·&nbsp; Dikembangkan untuk keperluan akademik
+</footer>
+
+<script>
+  // ============================================================
+  // DATA JADWAL
+  // ============================================================
+  const DATA = [
+    // KELAS I
+    { hari:'Senin',  jam:'07.00–08.00', mapel:'Al-Qur\'an & Tajwid',  kelas:'I',   ustadz:'Ust. Hasan Basri',     ruang:'Kelas 1A' },
+    { hari:'Senin',  jam:'08.00–09.00', mapel:'Nahwu Dasar',           kelas:'I',   ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 1A' },
+    { hari:'Selasa', jam:'07.00–08.00', mapel:'Fiqih Ibadah',          kelas:'I',   ustadz:'Ust. Hasan Basri',     ruang:'Kelas 1A' },
+    { hari:'Selasa', jam:'08.00–09.00', mapel:'Aqidah Akhlak',         kelas:'I',   ustadz:'Usth. Fatimah',        ruang:'Kelas 1A' },
+    { hari:'Rabu',   jam:'07.00–08.00', mapel:'Bahasa Arab',           kelas:'I',   ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 1A' },
+    { hari:'Kamis',  jam:'07.00–08.00', mapel:'Tahfidz Al-Qur\'an',   kelas:'I',   ustadz:'Ust. Malik Ibrahim',   ruang:'Aula Utama' },
+    { hari:'Sabtu',  jam:'07.00–09.00', mapel:'Bahasa Indonesia',      kelas:'I',   ustadz:'Usth. Nur Aini',       ruang:'Kelas 1A' },
+
+    // KELAS II
+    { hari:'Senin',  jam:'09.00–10.00', mapel:'Al-Qur\'an & Tajwid',  kelas:'II',  ustadz:'Ust. Malik Ibrahim',   ruang:'Kelas 2A' },
+    { hari:'Senin',  jam:'10.00–11.00', mapel:'Nahwu & Shorof',       kelas:'II',  ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 2A' },
+    { hari:'Selasa', jam:'09.00–10.00', mapel:'Fiqih Muamalah',       kelas:'II',  ustadz:'Ust. Hasan Basri',     ruang:'Kelas 2A' },
+    { hari:'Rabu',   jam:'09.00–10.00', mapel:'Bahasa Arab Percakapan',kelas:'II',  ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 2A' },
+    { hari:'Kamis',  jam:'09.00–10.00', mapel:'Tahfidz Al-Qur\'an',   kelas:'II',  ustadz:'Ust. Malik Ibrahim',   ruang:'Aula Utama' },
+    { hari:'Jumat',  jam:'07.00–08.00', mapel:'Siroh Nabawiyah',       kelas:'II',  ustadz:'Ust. Hasan Basri',     ruang:'Kelas 2A' },
+    { hari:'Sabtu',  jam:'09.00–10.00', mapel:'Matematika',            kelas:'II',  ustadz:'Usth. Nur Aini',       ruang:'Kelas 2A' },
+
+    // KELAS III
+    { hari:'Senin',  jam:'11.00–12.00', mapel:'Tafsir Al-Qur\'an',    kelas:'III', ustadz:'Ust. Hasan Basri',     ruang:'Kelas 3A' },
+    { hari:'Selasa', jam:'11.00–12.00', mapel:'Fiqih Lanjutan',        kelas:'III', ustadz:'KH. Ahmad At Taqwa',   ruang:'Masjid' },
+    { hari:'Rabu',   jam:'11.00–12.00', mapel:'Bahasa Arab Lanjut',   kelas:'III', ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 3A' },
+    { hari:'Kamis',  jam:'11.00–12.00', mapel:'Tahfidz Al-Qur\'an',   kelas:'III', ustadz:'Ust. Malik Ibrahim',   ruang:'Aula Utama' },
+    { hari:'Jumat',  jam:'08.00–09.00', mapel:'Hadits Arba\'in',       kelas:'III', ustadz:'KH. Ahmad At Taqwa',   ruang:'Masjid' },
+    { hari:'Sabtu',  jam:'11.00–12.00', mapel:'Bahasa Inggris',        kelas:'III', ustadz:'Usth. Nur Aini',       ruang:'Kelas 3A' },
+
+    // KELAS IV
+    { hari:'Senin',  jam:'13.30–14.30', mapel:'Kitab Jurumiyah',      kelas:'IV',  ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 4A' },
+    { hari:'Selasa', jam:'13.30–14.30', mapel:'Ushul Fiqih',           kelas:'IV',  ustadz:'KH. Ahmad At Taqwa',   ruang:'Kelas 4A' },
+    { hari:'Rabu',   jam:'13.30–14.30', mapel:'Tafsir Jalalain',       kelas:'IV',  ustadz:'Ust. Hasan Basri',     ruang:'Kelas 4A' },
+    { hari:'Kamis',  jam:'13.30–14.30', mapel:'Tahfidz Al-Qur\'an',   kelas:'IV',  ustadz:'Ust. Malik Ibrahim',   ruang:'Aula Utama' },
+    { hari:'Jumat',  jam:'09.00–10.00', mapel:'Tarikh Islam',          kelas:'IV',  ustadz:'Ust. Hasan Basri',     ruang:'Kelas 4A' },
+    { hari:'Sabtu',  jam:'13.30–14.30', mapel:'IPA / Sains',           kelas:'IV',  ustadz:'Usth. Nur Aini',       ruang:'Lab IPA' },
+
+    // KELAS V
+    { hari:'Senin',  jam:'14.30–15.30', mapel:'Kitab Alfiyah',        kelas:'V',   ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 5A' },
+    { hari:'Selasa', jam:'14.30–15.30', mapel:'Fiqih Munakahat',      kelas:'V',   ustadz:'KH. Ahmad At Taqwa',   ruang:'Kelas 5A' },
+    { hari:'Rabu',   jam:'14.30–15.30', mapel:'Balaghah',             kelas:'V',   ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 5A' },
+    { hari:'Kamis',  jam:'14.30–15.30', mapel:'Tahfidz Al-Qur\'an',  kelas:'V',   ustadz:'Ust. Malik Ibrahim',   ruang:'Aula Utama' },
+    { hari:'Jumat',  jam:'10.00–11.00', mapel:'Ekonomi Islam',        kelas:'V',   ustadz:'Usth. Fatimah',        ruang:'Kelas 5A' },
+    { hari:'Sabtu',  jam:'14.30–15.30', mapel:'Bahasa Inggris Adv.', kelas:'V',   ustadz:'Usth. Nur Aini',       ruang:'Kelas 5A' },
+
+    // KELAS VI
+    { hari:'Senin',  jam:'08.00–09.30', mapel:'Kitab Ihya Ulumuddin', kelas:'VI',  ustadz:'KH. Ahmad At Taqwa',   ruang:'Kelas 6A' },
+    { hari:'Selasa', jam:'08.00–09.30', mapel:'Fiqih Siyasah',        kelas:'VI',  ustadz:'Ust. Hasan Basri',     ruang:'Kelas 6A' },
+    { hari:'Rabu',   jam:'08.00–09.30', mapel:'Tafsir Ibnu Katsir',   kelas:'VI',  ustadz:'KH. Ahmad At Taqwa',   ruang:'Kelas 6A' },
+    { hari:'Kamis',  jam:'08.00–09.30', mapel:'Tahfidz 30 Juz',       kelas:'VI',  ustadz:'Ust. Malik Ibrahim',   ruang:'Aula Utama' },
+    { hari:'Jumat',  jam:'07.00–08.00', mapel:'Persiapan Imtihan',    kelas:'VI',  ustadz:'Ust. Hasan Basri',     ruang:'Kelas 6A' },
+    { hari:'Sabtu',  jam:'08.00–09.30', mapel:'Ujian & Evaluasi',     kelas:'VI',  ustadz:'Ust. Ahmad Fauzi',     ruang:'Kelas 6A' },
+  ];
+
+  const HARI_ORDER = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const HARI_COLOR = { Senin:'senin', Selasa:'selasa', Rabu:'rabu', Kamis:'kamis', Jumat:'jumat', Sabtu:'sabtu' };
+  const HARI_BADGE = { Senin:'hari-senin', Selasa:'hari-selasa', Rabu:'hari-rabu', Kamis:'hari-kamis', Jumat:'hari-jumat', Sabtu:'hari-sabtu', Ahad:'hari-ahad' };
+
+  // Render tabel semua
+  function renderTabelSemua() {
+    const tbody = document.getElementById('tabel-semua');
+    tbody.innerHTML = DATA.map(d => `
+      <tr>
+        <td><span class="hari-badge ${HARI_BADGE[d.hari]}">${d.hari}</span></td>
+        <td><span class="jam-badge">${d.jam}</span></td>
+        <td class="mapel">${d.mapel}</td>
+        <td><span class="kelas-badge">Kls ${d.kelas}</span></td>
+        <td class="ustadz">${d.ustadz}</td>
+        <td style="font-size:0.82rem;color:#6b7280">${d.ruang}</td>
+      </tr>`).join('');
+  }
+
+  // Filter kelas
+  let kelasAktif = 'I';
+  function filterKelas(kelas) {
+    kelasAktif = kelas;
+    const namaKelas = { I:'I (Ula)', II:'II (Ula)', III:'III (Ula)', IV:'IV (Wustho)', V:'V (Wustho)', VI:'VI (Ulya)' };
+    document.getElementById('judul-kelas').textContent = '📖 Jadwal Kelas ' + namaKelas[kelas];
+    const filtered = DATA.filter(d => d.kelas === kelas);
+    const sorted = HARI_ORDER.flatMap(h => filtered.filter(d => d.hari === h));
+    const tbody = document.getElementById('tabel-kelas');
+    tbody.innerHTML = sorted.map(d => `
+      <tr>
+        <td><span class="hari-badge ${HARI_BADGE[d.hari]}">${d.hari}</span></td>
+        <td><span class="jam-badge">${d.jam}</span></td>
+        <td class="mapel">${d.mapel}</td>
+        <td class="ustadz">${d.ustadz}</td>
+        <td style="font-size:0.82rem;color:#6b7280">${d.ruang}</td>
+      </tr>`).join('');
+
+    // Update button state
+    ['I','II','III','IV','V','VI'].forEach(k => {
+      const btn = document.getElementById('btn-kelas-' + ['I','II','III','IV','V','VI'].indexOf(k)+1);
+      if (btn) btn.classList.toggle('active', k === kelas);
+    });
+  }
+
+  // Render jadwal harian
+  function renderHarian() {
+    const grid = document.getElementById('hari-grid');
+    grid.innerHTML = HARI_ORDER.map(hari => {
+      const items = DATA.filter(d => d.hari === hari);
+      const liItems = items.map(d => `
+        <li>
+          <div class="li-jam">${d.jam}</div>
+          <div class="li-info">
+            <div class="li-mapel">${d.mapel} <span class="kelas-badge" style="font-size:0.68rem">Kls ${d.kelas}</span></div>
+            <div class="li-ust">${d.ustadz} · ${d.ruang}</div>
+          </div>
+        </li>`).join('');
+      return `
+        <div class="hari-card">
+          <div class="hari-card-header ${HARI_COLOR[hari]}">
+            <span>${hari}</span>
+            <span style="font-size:0.75rem;opacity:0.9">${items.length} sesi</span>
+          </div>
+          <ul>${liItems}</ul>
+        </div>`;
+    }).join('');
+  }
+
+  // Tab navigation
+  function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-tabs .tab-btn').forEach((btn, i) => {
+      const ids = ['beranda','jadwal-kelas','jadwal-harian','kegiatan','profil'];
+      btn.classList.toggle('active', ids[i] === id);
+    });
+  }
+
+  // Init
+  renderTabelSemua();
+  filterKelas('I');
+  renderHarian();
+</script>
+</body>
+</html>
